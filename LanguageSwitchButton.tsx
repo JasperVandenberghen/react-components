@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 
 type LanguageSwitchButtonProps = {
   style?: React.CSSProperties
-  langs: string[]
+  langs: string[] // array of supported languages codes e.g. ([ 'gb', 'fr' ]}
 }
 
 const LanguageSwitchButton = ({ style, langs }: LanguageSwitchButtonProps) => {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation() // t() can be used to translate text e.g. ({t(English) --> "Anglais")
 
   const handleClick = async (lng: string) => {
     await i18n.changeLanguage(lng)
