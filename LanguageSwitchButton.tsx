@@ -1,44 +1,50 @@
-import { Button } from '@mui/material'
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { ReactCountryFlag } from 'react-country-flag'
 import { useTranslation } from 'react-i18next'
 
 type LanguageSwitchButtonProps = {
   style?: React.CSSProperties
-  langs: string[] // array of supported languages codes e.g. ([ 'gb', 'fr' ]}
+  langs: string[]
 }
 
 const LanguageSwitchButton = ({ style, langs }: LanguageSwitchButtonProps) => {
-  const { t, i18n } = useTranslation() // t() can be used to translate text e.g. ({t(English) --> "Anglais")
+  const { t, i18n } = useTranslation()
 
-  const handleClick = async (lng: string) => {
-    await i18n.changeLanguage(lng)
+  const handleChange = async (event: SelectChangeEvent<string>) => {
+    await i18n.changeLanguage(
+      event.target.value === 'gb' ? 'en' : event.target.value
+    )
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: style?.flexDirection === 'row' ? 'row' : 'column',
+    <Select
+      value={i18n.language}
+      onChange={handleChange}
+      sx={{
+        boxShadow: 'none',
+        '.MuiOutlinedInput-notchedOutline': { border: 0 },
+        '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+          border: 0,
+        },
+        '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
+          {
+            border: 0,
+          },
       }}
     >
       {langs.map((lang) => (
-        <>
-          <Button
-            style={{ marginBottom: 'auto' }}
-            onClick={() => handleClick(lang)}
-          >
-            <ReactCountryFlag
-              countryCode={lang}
-              svg
-              style={{
-                width: style?.width ?? '1.5rem',
-                height: style?.height ?? '1.5rem',
-              }}
-            />
-          </Button>
-        </>
+        <MenuItem key={lang} value={lang}>
+          <ReactCountryFlag
+            countryCode={lang}
+            svg
+            style={{
+              width: style?.width ?? '1.5rem',
+              height: style?.height ?? '1.5rem',
+            }}
+          />
+        </MenuItem>
       ))}
-    </div>
+    </Select>
   )
 }
 
